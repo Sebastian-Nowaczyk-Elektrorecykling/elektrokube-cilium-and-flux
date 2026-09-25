@@ -11,6 +11,13 @@ routingMode: tunnel
 tunnelProtocol: vxlan
 bpf:
   masquerade: true
+l7Proxy: true
+envoy:
+  enabled: true
+gatewayAPI:
+  enabled: true
+  gatewayClass:
+    create: true
 ipv4:
   enabled: true
 ipv6:

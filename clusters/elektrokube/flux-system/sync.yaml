@@ -1,5 +1,7 @@
-# Handoff contract for the later elektrokube-scripts integration:
+# Handoff contract for elektrokube-scripts:
 # - Cilium 1.20.2 must already be the Helm release cilium in kube-system.
+# - Fresh bootstrap installs Gateway API v1.6.1 before Cilium, with Gateway API
+#   enabled and GatewayClass cilium. Flux subsequently owns the shared CRDs.
 # - Flux must be installed from infrastructure/flux (standard manifest install,
 #   four controllers, v2.9.5); do not run a competing Helm/Operator Flux manager.
 # - Create ConfigMap flux-system/cluster-settings before applying this directory.
