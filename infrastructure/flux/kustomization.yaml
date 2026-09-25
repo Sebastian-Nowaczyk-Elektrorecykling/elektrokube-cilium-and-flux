@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Pinned Flux v2.9.5, exported with the four standard controllers.
+  - gotk-components.yaml
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+    patch: |-
+      - op: add
+        path: /spec/template/spec/tolerations
+        value:
+          # Dedicated controllers created by elektrokube-scripts use this taint.
+          - key: CriticalAddonsOnly
+            operator: Exists
+          - key: node-role.kubernetes.io/control-plane
+            operator: Exists
+            effect: NoSchedule
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: kustomize-controller
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --feature-gates=StrictPostBuildSubstitutions=true

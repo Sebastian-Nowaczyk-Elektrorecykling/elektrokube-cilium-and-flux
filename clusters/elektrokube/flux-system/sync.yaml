@@ -1,0 +1,31 @@
+# Handoff contract for the later elektrokube-scripts integration:
+# - Cilium 1.20.2 must already be the Helm release cilium in kube-system.
+# - Flux must be installed from infrastructure/flux (standard manifest install,
+#   four controllers, v2.9.5); do not run a competing Helm/Operator Flux manager.
+# - Create ConfigMap flux-system/cluster-settings before applying this directory.
+#   Its string data keys come from /etc/elektrokube/cluster.json:
+#     API_IP       <- api_address (the actual, resolved first-node address)
+#     CLUSTER_NAME <- cluster_name
+#   Keep that ConfigMap outside Git; never substitute a guessed API address.
+# - Check the live Cilium version and Helm values against the bootstrap settings
+#   before handoff. Once adopted, change Cilium through Git, not bootstrap reruns.
+# Applying this directory seeds the source and root reconciliation only.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 5m
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./clusters/elektrokube
+  # Retain the reconciliation graph if a path/resource is removed by mistake.
+  prune: false
+  deletionPolicy: Orphan
+  # The root contains itself; waiting on every resource would wait on itself.
+  # Each child performs its own health checks.
+  wait: false

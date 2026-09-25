@@ -1,0 +1,43 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  interval: 10m
+  retryInterval: 1m
+  timeout: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/flux
+  # Flux controllers, CRDs and namespace must survive Git/path deletions.
+  prune: false
+  deletionPolicy: Orphan
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cilium
+  namespace: flux-system
+spec:
+  interval: 5m
+  retryInterval: 1m
+  timeout: 20m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/cilium
+  # Deleting the HelmRelease would uninstall the cluster's network.
+  prune: false
+  deletionPolicy: Orphan
+  wait: true
+  # Establish the pinned controllers and strict substitution before adoption.
+  dependsOn:
+    - name: flux
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false

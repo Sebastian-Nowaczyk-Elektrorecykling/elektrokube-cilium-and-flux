@@ -1,0 +1,45 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  interval: 1h
+  url: https://helm.cilium.io
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  interval: 10m
+  timeout: 15m
+  # All three fields match elektrokube-scripts/bootstrap-cluster.sh.
+  # Changing release identity after adoption can uninstall the old release.
+  releaseName: cilium
+  targetNamespace: kube-system
+  storageNamespace: kube-system
+  chart:
+    spec:
+      chart: cilium
+      version: "1.20.2"
+      sourceRef:
+        kind: HelmRepository
+        name: cilium
+  valuesFrom:
+    - kind: ConfigMap
+      name: cilium-values
+      valuesKey: values.yaml
+  # Retry in place: an install timeout must never trigger CNI uninstallation.
+  install:
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  upgrade:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  driftDetection:
+    mode: enabled

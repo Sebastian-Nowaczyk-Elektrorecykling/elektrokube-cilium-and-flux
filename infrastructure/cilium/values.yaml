@@ -1,0 +1,34 @@
+# Match elektrokube-scripts/lib/config.py:cilium_values for initial adoption.
+# Cluster-specific strings are supplied by flux-system/cluster-settings.
+cluster:
+  name: "${CLUSTER_NAME}"
+kubeProxyReplacement: true
+k8sServiceHost: "${API_IP}"
+k8sServicePort: 6443
+ipam:
+  mode: kubernetes
+routingMode: tunnel
+tunnelProtocol: vxlan
+bpf:
+  masquerade: true
+ipv4:
+  enabled: true
+ipv6:
+  enabled: false
+operator:
+  replicas: 1
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+  ui:
+    enabled: true
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
