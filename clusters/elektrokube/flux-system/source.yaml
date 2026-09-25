@@ -1,0 +1,12 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60s
+  # This repository is public; no GitHub token or deploy key is required.
+  url: https://github.com/Sebastian-Nowaczyk-Elektrorecykling/elektrokube-cilium-and-flux.git
+  ref:
+    branch: main
