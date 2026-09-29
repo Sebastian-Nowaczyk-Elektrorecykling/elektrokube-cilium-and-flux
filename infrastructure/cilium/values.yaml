@@ -14,6 +14,14 @@ bpf:
 l7Proxy: true
 envoy:
   enabled: true
+  securityContext:
+    capabilities:
+      # Host-network listeners normally bind to the privileged ingress ports 80 and 443.
+      keepCapNetBindService: true
+      envoy:
+        - NET_ADMIN
+        - SYS_ADMIN
+        - NET_BIND_SERVICE
 gatewayAPI:
   enabled: true
   # Expose Gateway listeners directly on every Cilium node's host IP.
