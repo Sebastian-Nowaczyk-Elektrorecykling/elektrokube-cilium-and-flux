@@ -16,6 +16,10 @@ envoy:
   enabled: true
 gatewayAPI:
   enabled: true
+  # Expose Gateway listeners directly on every Cilium node's host IP.
+  # This replaces the need to advertise LoadBalancer IPs with L2 or BGP.
+  hostNetwork:
+    enabled: true
   gatewayClass:
     create: true
 ipv4:
