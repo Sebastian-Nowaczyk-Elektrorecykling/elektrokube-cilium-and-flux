@@ -1,17 +1,18 @@
 # Handoff contract for elektrokube-scripts:
-# - Cilium 1.20.2 must already be the Helm release cilium in kube-system.
-# - Fresh bootstrap installs Gateway API v1.6.1 before Cilium, with Gateway API
+# - A deployed Cilium Helm release cilium must already exist in kube-system.
+# - Fresh bootstrap installs Gateway API v1.6.2 before Cilium, with Gateway API
 #   enabled and GatewayClass cilium. Flux subsequently owns the shared CRDs and
 #   applies the experimental bundle required for HTTPRoute ExternalAuth.
 # - Flux must be installed from infrastructure/flux (standard manifest install,
-#   four controllers, v2.9.5); do not run a competing Helm/Operator Flux manager.
+#   four controllers, v2.9.6); do not run a competing Helm/Operator Flux manager.
 # - Create ConfigMap flux-system/cluster-settings before applying this directory.
 #   Its string data keys come from /etc/elektrokube/cluster.json:
 #     API_IP       <- api_address (the actual, resolved first-node address)
 #     CLUSTER_NAME <- cluster_name
 #   Keep that ConfigMap outside Git; never substitute a guessed API address.
-# - Check the live Cilium version and Helm values against the bootstrap settings
-#   before handoff. Once adopted, change Cilium through Git, not bootstrap reruns.
+# - Git is authoritative for chart version and values at adoption. Review the
+#   live-to-Git upgrade path before handoff; it can restart cluster networking.
+#   Once adopted, change Cilium through Git, not bootstrap reruns.
 # Applying this directory seeds the source and root reconciliation only.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
