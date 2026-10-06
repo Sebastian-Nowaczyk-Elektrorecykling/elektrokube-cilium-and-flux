@@ -1,6 +1,6 @@
 # Gateway API and external authorization
 
-Flux installs the Gateway API **v1.6.1 experimental bundle** before reconciling
+Flux installs the Gateway API **v1.6.2 experimental bundle** before reconciling
 Cilium. The pinned Cilium **1.20.2** already supports the `ExternalAuth` HTTPRoute
 filter, and `gatewayAPI.enabled`, `l7Proxy`, and Envoy are already enabled in
 `../cilium/values.yaml`. No additional Cilium Helm flag is needed.
@@ -81,7 +81,7 @@ After configuring an application route, check its `Accepted` and `ResolvedRefs`
 conditions for the Cilium parent and test both allowed and denied requests.
 Also verify that an unavailable authorization backend denies requests.
 
-Bootstrap can hand off an existing v1.6.1 standard installation; Flux upgrades
+Bootstrap can hand off an existing v1.6.2 standard installation; Flux upgrades
 the schemas to the experimental channel. After handoff, keep CRD management in
 Flux and do not reapply the standard bundle from a bootstrap rerun. Do not
 downgrade to standard schemas while routes rely on experimental filters: losing
@@ -93,5 +93,5 @@ make schema downgrades safe.
 
 - [Cilium 1.20 release announcement: External Authorization](https://github.com/cilium/cilium/discussions/47586)
 - [Cilium Gateway API prerequisites and CRD installation](https://docs.cilium.io/en/stable/network/servicemesh/gateway-api/gateway-api/)
-- [Gateway API v1.6.1 release and installation bundles](https://github.com/kubernetes-sigs/gateway-api/releases/tag/v1.6.1)
-- [Pinned experimental HTTPRoute schema](https://github.com/kubernetes-sigs/gateway-api/blob/v1.6.1/config/crd/experimental/gateway.networking.k8s.io_httproutes.yaml)
+- [Gateway API v1.6.2 release and installation bundles](https://github.com/kubernetes-sigs/gateway-api/releases/tag/v1.6.2)
+- [Pinned experimental HTTPRoute schema](https://github.com/kubernetes-sigs/gateway-api/blob/v1.6.2/config/crd/experimental/gateway.networking.k8s.io_httproutes.yaml)

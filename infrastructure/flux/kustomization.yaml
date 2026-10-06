@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  # Pinned Flux v2.9.5, exported with the four standard controllers.
+  # Pinned Flux v2.9.6, exported with the four standard controllers.
   - gotk-components.yaml
 patches:
   - target:
